@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSE sample</title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+            height: 100vh;
+            background: #444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #progressBar {
+            color: white;
+            font-size: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="progressBar"><span id="progressValue">0</span> %</div>
+
+    <script>
+        console.log("client started")
+        const progressBar = document.getElementById("progressBar");
+        const progressValue = document.getElementById("progressValue");
+        const eventSource = new EventSource("http://localhost:8080");
+
+        eventSource.addEventListener("onProgress", (event) => {
+            const data = JSON.parse(event.data);
+            console.log(data)
+            progressValue.textContent = data["progress"];
+        });
+
+        eventSource.addEventListener("done", (event) => {
+            progressBar.innerHTML = "Done!"
+            console.log("done")
+            eventSource.close();
+        });
+
+        eventSource.onerror = (event) => {
+            console.log("error")
+            eventSource.close();
+        }
+    </script>
+</body>
+</html>
