@@ -26,25 +26,25 @@
     <div id="progressBar"><span id="progressValue">0</span> %</div>
 
     <script>
-        console.log("client started")
+        console.log("client started");
         const progressBar = document.getElementById("progressBar");
         const progressValue = document.getElementById("progressValue");
         const eventSource = new EventSource("http://localhost:8080");
 
         eventSource.addEventListener("onProgress", (event) => {
             const data = JSON.parse(event.data);
-            console.log(data)
+            console.log(data);
             progressValue.textContent = data["progress"];
         });
 
         eventSource.addEventListener("done", (event) => {
-            progressBar.innerHTML = "Done!"
-            console.log("done")
+            progressBar.innerHTML = "Done!";
+            console.log("done");
             eventSource.close();
         });
 
         eventSource.onerror = (event) => {
-            console.log("error")
+            console.log("error");
             eventSource.close();
         }
     </script>
